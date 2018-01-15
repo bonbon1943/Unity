@@ -43,14 +43,12 @@ ret=`systemctl start firewalld >> ${log_path} 2>&1`
 # 开启端口
 ret=`firewall-cmd --permanent --zone=public --add-port=22/tcp >> ${log_path} 2>&1`
 ret=`firewall-cmd --permanent --zone=public --add-port=$port/tcp >> ${log_path} 2>&1`
+ret=`firewall-cmd --permanent --zone=public --add-port=$port/udp >> ${log_path} 2>&1`
 ret=`firewall-cmd --reload >> ${log_path} 2>&1`
 # 如果有相同功能的进程则杀死
 # pkill -9 ssserver
 ps -ef|grep ssserver|grep shadowsocks|awk '{ print $2 }'|xargs kill -9
 nohup /usr/bin/ssserver -c /etc/shadowsocks.json &
-
-firewall-cmd --permanent --zone=public --add-port=$port/upd
-firewall-cmd --reload
 # 成功
 if [ $? -eq 0 ];then
 clear
